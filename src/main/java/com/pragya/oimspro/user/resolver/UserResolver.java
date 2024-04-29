@@ -17,7 +17,7 @@ public class UserResolver {
     @Autowired
     private UserService userService;
 
-    @PostMapping
+    @PostMapping("/create")
     public void createUser(@RequestBody User user) {
         userService.createUser(user);
     }
