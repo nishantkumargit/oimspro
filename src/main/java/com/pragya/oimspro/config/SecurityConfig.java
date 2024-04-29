@@ -45,9 +45,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/api/signup", "/api/signin")
-                        .permitAll().anyRequest().authenticated()
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/signup", "/api/signin").permitAll()
+                        .requestMatchers("admin/updateRole").hasAnyAuthority("ROLE_USER")
+                        .requestMatchers("/register/**").hasAnyAuthority("ROLE_ADMIN")
+                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN","ROLE_COMPANY_ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

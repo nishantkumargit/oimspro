@@ -1,5 +1,6 @@
 package com.pragya.oimspro.user.entity;
 
+import com.pragya.oimspro.company.entity.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,6 +42,10 @@ public class User implements UserDetails {
 
     @Column(name="PASSWORD")
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_ID")
+    private Company company;
 
     @Enumerated(EnumType.STRING)
     private Role role;
