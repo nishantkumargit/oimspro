@@ -1,6 +1,7 @@
 package com.pragya.oimspro.mqtt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.pragya.oimspro.nodemcu.service.McuMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.messaging.MessageChannel;
 
 @Component
 public class Subscriber {
+    @Autowired
+    McuMessageService mcuMessageService;
 
     Logger logger = LoggerFactory.getLogger(Subscriber.class);
 
@@ -30,9 +33,9 @@ public class Subscriber {
     private String clientId = "MQTT_FX_Client";
 
     //    @Value(value = "${mqtt.default-topic}")
-    private String defaultTopic = "esp8266_data_BF02,esp8266_data_BF06,esp8266_data_HDR-02,PMP_data_HDR-01";
+    private String defaultTopic = "esp8266_data_BF02,esp8266_data_BF06,esp8266_data_HDR-02,PMP_data_HDR-01,PMP_data_test_HDR-01";
 
-    private String userName = "ankit";
+    private String userName = "ankit1";
 
     private String password = "Ankit@123";
 
@@ -47,7 +50,6 @@ public class Subscriber {
         logger.info("Factory created");
         return factory;
     }
-
 
 
     @Bean
@@ -73,6 +75,7 @@ public class Subscriber {
     public void handleMessage(String message) throws JsonProcessingException {
 
         logger.info("Received message: " + message);
+        mcuMessageService.sendMcuMessage(message);
 
         // Process the received message as needed
     }
