@@ -12,11 +12,13 @@ public class NodeMcu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String code;
+    private String deviceId;
     private String name;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     //    @OneToMany(mappedBy = "nodeMcu", cascade = CascadeType.ALL)
 //    private List<MCUMessage> messages;
     private Date installationDate;
     private Date receivedTime;
 }
+

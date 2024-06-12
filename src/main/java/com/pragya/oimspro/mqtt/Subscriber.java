@@ -24,38 +24,23 @@ public class Subscriber {
     @Autowired
     McuMessageService mcuMessageService;
 
+    @Autowired
+    MqttConfig mqttConfig;
+
     Logger logger = LoggerFactory.getLogger(Subscriber.class);
 
-    //    @Value(value = "${mqtt.broker-url}")
-    private String brokerUrl = "ssl://d08900cfdef5463098201f44a1532917.s2.eu.hivemq.cloud:8883";
-
-    //    @Value(value = "${mqtt.client-id}")
-    private String clientId = "MQTT_FX_Client";
-
-    //    @Value(value = "${mqtt.default-topic}")
     private String defaultTopic = "esp8266_data_BF02,esp8266_data_BF06,esp8266_data_HDR-02,PMP_data_HDR-01,PMP_data_test_HDR-01";
-
-    private String userName = "ankit1";
-
-    private String password = "Ankit@123";
 
     @Autowired
     private Channel channel;
 
+    @Autowired
+    private DefaultMqttPahoClientFactory mqttClientFactory;
 
     @Bean
-    public DefaultMqttPahoClientFactory mqttClientFactory() {
-        DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
-        factory.setConnectionOptions(getConnectionInfo());
-        logger.info("Factory created");
-        return factory;
-    }
-
-
-    @Bean
-    public MqttPahoMessageDrivenChannelAdapter mqttInbound(DefaultMqttPahoClientFactory mqttClientFactory) {
+    public MqttPahoMessageDrivenChannelAdapter mqttInbound() {
         String[] topics = defaultTopic.split(",");
-        MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(clientId + "_inbound", mqttClientFactory, topics);
+        MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(mqttConfig.getClientId() + "_inbound", mqttClientFactory, topics);
         adapter.setCompletionTimeout(5000); // Set timeout (milliseconds) for message processing
         adapter.setConverter(new DefaultPahoMessageConverter()); // Optional: Customize message converter
         adapter.setQos(1); // Set Quality of Service (QoS)
@@ -64,19 +49,10 @@ public class Subscriber {
         return adapter;
     }
 
-    public MqttConnectOptions getConnectionInfo() {
-        MqttConnectOptions options = new MqttConnectOptions();
-        options.setUserName(userName);
-        options.setPassword(password.toCharArray());
-        options.setServerURIs(new String[] {brokerUrl});
-        return options;
-    }
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public void handleMessage(String message) throws JsonProcessingException {
-
         logger.info("Received message: " + message);
         mcuMessageService.sendMcuMessage(message);
-
         // Process the received message as needed
     }
 }
