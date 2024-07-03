@@ -8,6 +8,7 @@ import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,6 +25,7 @@ public class Publisher {
         messageHandler.setAsync(true);
         messageHandler.setDefaultRetained(true);
         messageHandler.setConverter(new DefaultPahoMessageConverter());
+        messageHandler.setDefaultQos(1);
         return messageHandler;
     }
 
