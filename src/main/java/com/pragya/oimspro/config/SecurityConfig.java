@@ -45,7 +45,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/signup", "/api/signin","updateDeviceWiFiCreds").permitAll()
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/signup", "/api/signin","/updateDeviceWiFiCreds","/updateDeviceMqttCreds","resetCounter","/deferred").permitAll()
                         .requestMatchers("admin/updateRole").hasAnyAuthority("ROLE_USER")
                         .requestMatchers("/register/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN","ROLE_COMPANY_ADMIN")
