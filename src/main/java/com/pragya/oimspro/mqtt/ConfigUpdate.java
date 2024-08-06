@@ -12,7 +12,7 @@ public class ConfigUpdate {
     @Autowired
     Publisher publisher;
 
-    private static final String WIFI_CONFIG_UPDATE_TOPIC_PRECEDE = "config/update/WiFi/";
+    private static final String WIFI_CONFIG_UPDATE_TOPIC_PRECEDE = "config/update/wifi/";
 
     private static final String MQTT_CONFIG_UPDATE_TOPIC_PRECEDE = "config/update/mqtt/";
 

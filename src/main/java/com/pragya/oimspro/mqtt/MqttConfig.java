@@ -36,6 +36,7 @@ public class MqttConfig {
         options.setUserName(userName);
         options.setPassword(password.toCharArray());
         options.setAutomaticReconnect(true);
+        options.setKeepAliveInterval(30000);
         options.setServerURIs(new String[] {brokerUrl});
         return options;
     }
