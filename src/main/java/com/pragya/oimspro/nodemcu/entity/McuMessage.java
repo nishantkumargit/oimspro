@@ -9,7 +9,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 @Entity
 @Data
-@Table(name = "MCU_MESSAGE")
+@Table(name = "MCU_MESSAGE",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"deviceId", "hourly_bucket"}))
 public class McuMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

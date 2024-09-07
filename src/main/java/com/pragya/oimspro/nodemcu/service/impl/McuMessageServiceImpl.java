@@ -62,6 +62,7 @@ public class McuMessageServiceImpl implements McuMessageService{
 
             logger.debug("Upserting message with deviceId: {}, siteId: {}, count: {}, publishedTime: {}, nodeMcuCode: {}, hourlyBucket: {}",
                     mcuMessage.getDeviceId(), mcuMessage.getSiteId(), mcuMessage.getCount(), mcuMessage.getPublishedTime(), mcuMessage.getNodeMcuCode(), hourlyBucket);
+//            mcuMessageRepository.save(mcuMessage);
             mcuMessageRepository.upsertMcuMessage(mcuMessage.getDeviceId(), mcuMessage.getSiteId(), mcuMessage.getCount(),
                     mcuMessage.getPublishedTime(), mcuMessage.getNodeMcuCode(), hourlyBucket);
             logger.info("mcu message added");}
