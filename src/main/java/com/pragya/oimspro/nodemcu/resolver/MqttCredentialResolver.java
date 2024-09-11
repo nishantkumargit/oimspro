@@ -14,36 +14,19 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import java.util.concurrent.ForkJoinPool;
 
 @RestController
+@RequestMapping("/api/update/")
 public class MqttCredentialResolver {
 
     @Autowired
     MqttCredsUpdationService mqttCredsUpdationService;
 
-    @PostMapping("/updateDeviceMqttCreds")
+    @PostMapping("deviceMqttCreds")
     public void configUpdate(@RequestBody MqttDetails mqttDetails){
         mqttCredsUpdationService.updateMqttDetails(mqttDetails);
     }
-    @PostMapping("/resetCounter")
+    @PostMapping("resetCounter")
     public void resetCounter(@RequestParam String deviceId){
         System.out.println("Resetting counter for devices "+ deviceId);
         mqttCredsUpdationService.resetCounter(deviceId);
-    }
-    @PostMapping("/test/deferred")
-    public @ResponseBody DeferredResult<ResponseEntity<String>> testDeferred() {
-//        HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-//        ShallowEtagHeaderFilter.disableContentCaching(httpServletRequest);
-
-        DeferredResult<ResponseEntity<String>> deferredResult = new DeferredResult<>(60000L); // 60 seconds timeout
-
-        ForkJoinPool.commonPool().submit(() -> {
-            try {
-                Thread.sleep(5000); // Simulate some processing
-                deferredResult.setResult(ResponseEntity.ok("Processed successfully"));
-            } catch (Exception e) {
-                deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request"));
-            }
-        });
-
-        return deferredResult;
     }
 }
