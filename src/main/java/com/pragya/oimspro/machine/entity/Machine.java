@@ -30,6 +30,9 @@ public class Machine {
     @Column(name="NAME")
     private String name;
 
+    @Column(name="MACHINE_OPERATOR")
+    private String machineOperator;
+
     @Column(name="TYPE")
     private String type;
 

@@ -3,10 +3,14 @@ package com.pragya.oimspro.nodemcu.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 @Entity
 @Data
-@Table(name = "MCU_MESSAGE")
+@Table(name = "MCU_MESSAGE",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"deviceId", "hourly_bucket"}))
 public class McuMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +24,9 @@ public class McuMessage {
     @Column(name = "nodemcu_code")
     private String nodeMcuCode;
 
+    @Column(name = "hourly_bucket")
+    private Date hourlyBucket;
+
     @Override
     public String toString() {
         return "MCUMessage{" +
@@ -30,6 +37,24 @@ public class McuMessage {
                 ", publishedTime=" + publishedTime +
                 ", nodeMcuCode='" + nodeMcuCode + '\'' +
                 '}';
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void updateHourlyBucket() {
+        if (publishedTime != null) {
+            // Convert Date to LocalDateTime
+            LocalDateTime publishedDateTime = publishedTime.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+
+            // Truncate LocalDateTime to the nearest hour
+            LocalDateTime truncatedDateTime = publishedDateTime.truncatedTo(ChronoUnit.HOURS);
+
+            // Convert LocalDateTime back to Date
+            this.hourlyBucket = Date.from(truncatedDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        }
+//        this.hourlyBucket = Date.from(publishedTime.toInstant().truncatedTo(ChronoUnit.HOURS));
     }
 
     public String getDeviceId() {

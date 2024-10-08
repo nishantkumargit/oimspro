@@ -5,6 +5,7 @@ import com.pragya.oimspro.nodemcu.service.McuMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,8 @@ public class Subscriber {
 
     Logger logger = LoggerFactory.getLogger(Subscriber.class);
 
-    private String defaultTopic = "esp8266_data_BF02,esp8266_data_BF06,esp8266_data_HDR-02,PMP_data_HDR-01,PMP_data_test_HDR-01";
+    @Value("${mqtt.subscribe.topic}")
+    private String defaultTopic;
 
     @Autowired
     private Channel channel;

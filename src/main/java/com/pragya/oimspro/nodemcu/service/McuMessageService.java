@@ -8,5 +8,6 @@ public interface McuMessageService {
     McuMessage addMcuMessage(McuMessage mcuMessage);
 
     void sendMcuMessage(String message) throws JsonProcessingException;
+
 }
 

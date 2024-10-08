@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Service
@@ -31,12 +34,37 @@ public class McuMessageServiceImpl implements McuMessageService{
     Logger logger = LoggerFactory.getLogger(McuMessageServiceImpl.class);
     ObjectMapper mapper = new ObjectMapper();
 
+    // Helper method to convert Date to LocalDateTime
+    private LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
+
+    // Helper method to convert LocalDateTime to Date
+    private Date convertToDate(LocalDateTime dateToConvert) {
+        return Date.from(dateToConvert
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+    }
+
 
     @Override
     public McuMessage addMcuMessage(McuMessage mcuMessage) {
         try{
-            logger.info("saving mcu message to database "+mcuMessage.toString());
-            mcuMessageRepository.save(mcuMessage);
+            LocalDateTime publishedDateTime = convertToLocalDateTime(mcuMessage.getPublishedTime());
+
+            // Truncate LocalDateTime to the nearest hour
+            LocalDateTime truncatedDateTime = publishedDateTime.truncatedTo(ChronoUnit.HOURS);
+
+            // Convert LocalDateTime back to Date
+            Date hourlyBucket = convertToDate(truncatedDateTime);
+
+            logger.debug("Upserting message with deviceId: {}, siteId: {}, count: {}, publishedTime: {}, nodeMcuCode: {}, hourlyBucket: {}",
+                    mcuMessage.getDeviceId(), mcuMessage.getSiteId(), mcuMessage.getCount(), mcuMessage.getPublishedTime(), mcuMessage.getNodeMcuCode(), hourlyBucket);
+//            mcuMessageRepository.save(mcuMessage);
+            mcuMessageRepository.upsertMcuMessage(mcuMessage.getDeviceId(), mcuMessage.getSiteId(), mcuMessage.getCount(),
+                    mcuMessage.getPublishedTime(), mcuMessage.getNodeMcuCode(), hourlyBucket);
             logger.info("mcu message added");}
         catch(Exception e){
             logger.error("error adding mcu message to database"+e);
@@ -61,17 +89,6 @@ public class McuMessageServiceImpl implements McuMessageService{
         module.addDeserializer(Date.class, new EpochDeserializer());
         mapper.registerModule(module);
         McuMessage mcuMessage = mapper.readValue(message, McuMessage.class);
-//        if(mcuMessage.getSiteId().equals("HDR-02")){
-//            mcuMessage.setNodeMcuCode("NODEMCU_CODE_HDR02");
-//        }
-//        else if(mcuMessage.getSiteId().equals("BF-02")){
-//            mcuMessage.setNodeMcuCode("NODEMCU_CODE_BF02");
-//        }
-//        else if(mcuMessage.getSiteId().equals("BF-06")){
-//            mcuMessage.setNodeMcuCode("NODEMCU_CODE_BF06");
-//        }else {
-//            mcuMessage.setNodeMcuCode("NODEMCU_CODE_1");
-//        }
         logger.info("received mcu message from mqtt "+mcuMessage.toString());
         String deviceId = mcuMessage.getDeviceId();
         NodeMcu nodeMcu = nodeMcuService.getNodeMcuFromDeviceId(deviceId);

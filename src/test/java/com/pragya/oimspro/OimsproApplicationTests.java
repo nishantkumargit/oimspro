@@ -1,14 +1,14 @@
 package com.pragya.oimspro;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+//import org.junit.jupiter.api.Disabled;
+//import org.junit.jupiter.api.Test;
+//import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class OimsproApplicationTests {
 
-	@Test
-	@Disabled
+//	@Test
+//	@Disabledbled
 	void contextLoads() {
 	}
 
