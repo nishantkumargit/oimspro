@@ -21,6 +21,11 @@ public class UserResolver {
         userService.createUser(user);
     }
 
+    @GetMapping("/get") //test handle
+    public String  get() {
+        return "ankit";
+    }
+
     @GetMapping
     public List<User> getUsers() {
         return userService.getAllUsers();
