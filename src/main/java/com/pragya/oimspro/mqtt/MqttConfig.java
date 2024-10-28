@@ -10,6 +10,8 @@ import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.util.UUID;
+
 @Configuration
 public class MqttConfig {
     Logger logger = LoggerFactory.getLogger(MqttConfig.class);
@@ -42,6 +44,6 @@ public class MqttConfig {
     }
 
     public String getClientId() {
-        return clientId;
+        return clientId+ UUID.randomUUID().toString();
     }
 }
