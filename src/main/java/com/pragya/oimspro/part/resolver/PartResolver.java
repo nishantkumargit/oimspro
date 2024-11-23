@@ -1,15 +1,14 @@
-package com.pragya.oimspro.part.entity.resolver;
+package com.pragya.oimspro.part.resolver;
 
 
-import com.pragya.oimspro.machine.entity.Machine;
-import com.pragya.oimspro.machine.service.MachineService;
 import com.pragya.oimspro.part.entity.Part;
-import com.pragya.oimspro.part.entity.service.PartService;
-import com.pragya.oimspro.user.entity.User;
-import com.pragya.oimspro.user.service.UserService;
+import com.pragya.oimspro.part.service.PartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 

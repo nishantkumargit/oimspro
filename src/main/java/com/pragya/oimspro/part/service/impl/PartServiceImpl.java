@@ -1,12 +1,10 @@
-package com.pragya.oimspro.part.entity.service;
+package com.pragya.oimspro.part.service.impl;
 
-import com.pragya.oimspro.machine.entity.Machine;
-import com.pragya.oimspro.machine.repository.MachineRepository;
+import com.pragya.oimspro.part.Repository.PartRepository;
 import com.pragya.oimspro.part.entity.Part;
-import com.pragya.oimspro.part.entity.Repository.PartRepository;
-import com.pragya.oimspro.user.entity.User;
+import com.pragya.oimspro.part.service.PartService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +12,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-
-public class PartService {
-
+public class PartServiceImpl implements PartService {
+    @Autowired
     private final PartRepository partRepository;
 
     @Transactional
@@ -32,4 +29,7 @@ public class PartService {
         partRepository.deleteById(id);
     }
 
+    public Part getPartById(long partId) {
+        return partRepository.findById(partId).orElse(null);
+    }
 }
