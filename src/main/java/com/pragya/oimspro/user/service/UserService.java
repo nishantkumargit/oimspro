@@ -20,7 +20,7 @@ public class UserService {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findByEmailId(username).orElseThrow(() -> new UsernameNotFoundException("Invelid username"));
+                return userRepository.findByEmailId(username).orElseThrow(() -> new UsernameNotFoundException("Invalid username"));
             }
         };
     }

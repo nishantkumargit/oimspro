@@ -23,8 +23,6 @@ public class Publisher {
     @Autowired
     private DefaultMqttPahoClientFactory mqttClientFactory;
 
-
-
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MqttPahoMessageHandler mqttOutbound() {
