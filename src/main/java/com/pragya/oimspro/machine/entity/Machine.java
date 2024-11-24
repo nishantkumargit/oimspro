@@ -1,13 +1,7 @@
 package com.pragya.oimspro.machine.entity;
 
-import com.pragya.oimspro.nodemcu.entity.NodeMcu;
-import com.pragya.oimspro.part.entity.Part;
-import com.pragya.oimspro.rawmaterial.entity.RawMaterial;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.Data;
-
-import java.util.Set;
+import lombok.*;
 
 @Entity
 @Data
@@ -39,20 +33,13 @@ public class Machine {
     @Column(name="STATUS")
     private String status;
 
+    @Column(name="CURRENT_PART_ID")
+    private Long currentPartId;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "MACHINE_PART_MAPPING",
-            joinColumns = @JoinColumn(name = "MACHINE_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PART_ID"))
-    private Set<Part> part;
+    @Column(name="CURRENT_RAW_MATERIAL_ID")
+    private Long currentRawMaterialId;
 
+    @Column(name="CURRENT_NODEMCU_ID")
+    private Long currentNodeMcuId;
 
-    @Nullable
-    @ManyToMany
-    private Set<RawMaterial> rawMaterial;
-
-    @Nullable
-    @OneToOne(cascade = CascadeType.ALL)
-    private NodeMcu nodeMcu;
 }

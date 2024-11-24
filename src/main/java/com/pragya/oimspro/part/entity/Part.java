@@ -1,11 +1,7 @@
 package com.pragya.oimspro.part.entity;
 
-import com.pragya.oimspro.machine.entity.Machine;
-import com.pragya.oimspro.rawmaterial.entity.RawMaterial;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.Set;
 
 @Entity
 @Data
@@ -25,8 +21,8 @@ public class Part{
     @Column(name="NAME")
     private String name;
 
-    @ManyToMany
-    private Set<RawMaterial> rawMaterial;
+//    @ManyToMany
+//    private Set<RawMaterial> rawMaterial;
 
     @Column(name="QUANTITY")
     private double quantity;
@@ -36,7 +32,4 @@ public class Part{
 
     @Column(name="DRAWING_URL")
     private String drawingUrl;
-
-    @ManyToMany
-    private Set<Machine> machines;
 }
