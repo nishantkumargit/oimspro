@@ -28,7 +28,7 @@ public class WiFiUpdationServiceImpl implements WiFiUpdationService {
             }
             for (String deviceId : wiFiDetails.getDeviceIdList()) {
                 NodeMcu nodeMcu = nodeMcuRepository.findByDeviceId(deviceId);
-                if(nodeMcu.getStatus() != null && nodeMcu.getStatus()== Status.ACTIVE){
+                if(nodeMcu!=null && nodeMcu.getStatus() != null && nodeMcu.getStatus()== Status.ACTIVE){
                     configUpdate.updateEsp32Config(nodeMcu.getDeviceId(), wiFiDetails.getSsid(), wiFiDetails.getPassword());
                 }
             }

@@ -5,20 +5,34 @@ import com.pragya.oimspro.user.entity.User;
 import com.pragya.oimspro.user.repository.UserRepository;
 import com.pragya.oimspro.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/api/user/")
 public class UserResolver {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
+    @PostMapping
     public void createUser(@RequestBody User user) {
         userService.createUser(user);
+    }
+
+    @GetMapping("/get") //test handle
+    public String  get() {
+        return "ankit";
+    }
+
+    @GetMapping
+    public List<User> getUsers() {
+        return userService.getAllUsers();
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteUser(@PathVariable long id) {
+        userService.deleteUser(id);
     }
 }

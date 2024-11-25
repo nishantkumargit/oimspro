@@ -6,13 +6,15 @@ import com.pragya.oimspro.registration.dto.CompanyRegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/")
 public class CompanyRegistrationResolver {
     @Autowired
     private CompanyService companyService;
-    @PostMapping("/register")
+    @PostMapping("register")
     public String registerCompany(@RequestBody CompanyRegistrationRequest companyRegistrationRequest) {
         Company company = companyService.registerCompany(companyRegistrationRequest);
         return "Company " +company.getName()+ "registered successfully with user: " + company.getUser().getEmailId() ;
