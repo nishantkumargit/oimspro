@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/machine/")
+@RequestMapping("/api/machine")
 @RequiredArgsConstructor
 public class MachineResolver {
 
