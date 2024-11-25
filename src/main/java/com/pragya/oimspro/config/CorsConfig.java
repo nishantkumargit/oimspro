@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*") // Allow your production Angular origin
+                .allowedOrigins("http://13.60.229.204/") // Allow your production Angular origin
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // Adjust allowed HTTP methods as needed
                 .allowedHeaders("*") // Adjust allowed headers as needed
                 .allowCredentials(true); // Consider carefully whether to allow credentials in production
