@@ -11,4 +11,6 @@ public interface MachineConfigurationHistoryService {
     MachineConfigurationHistory getMachineConfigurationHistoryByMachineId(Machine newMachine);
 
     void updateLastMachineConfiguration(Machine oldMachine, Machine newMachine);
+
+    void saveNewMachineConfiguration(Machine machine);
 }

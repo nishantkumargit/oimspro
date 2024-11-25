@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class McuMessageServiceImpl implements McuMessageService{
@@ -105,5 +106,12 @@ public class McuMessageServiceImpl implements McuMessageService{
 
         addMcuMessage(mcuMessage);
 
+    }
+    public Long getProductionCountForDevice(String deviceId, LocalDateTime start, LocalDateTime end) {
+        return Optional.ofNullable(mcuMessageRepository.getSumOfCountsForDevice(deviceId, start, end)).orElse(0L);
+    }
+
+    public Long getTotalProductionCount(LocalDateTime start, LocalDateTime end) {
+        return Optional.ofNullable(mcuMessageRepository.getSumOfCountsForAllDevices(start, end)).orElse(0L);
     }
 }

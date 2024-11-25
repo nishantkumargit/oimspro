@@ -45,6 +45,10 @@ public class MachineConfigurationHistoryServiceImpl implements MachineConfigurat
     }
 
     @Override
+    public void saveNewMachineConfiguration(Machine machine) {
+        addNewMachineConfiguration(machine,"New Machine");
+    }
+    @Override
     public MachineConfigurationHistory getMachineConfigurationHistoryByMachineId(Machine newMachine) {
         return machineConfigurationHistoryRepository.findByMachineId(newMachine.getId());
     }

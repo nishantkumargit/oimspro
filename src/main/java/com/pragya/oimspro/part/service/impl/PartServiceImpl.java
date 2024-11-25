@@ -1,6 +1,6 @@
 package com.pragya.oimspro.part.service.impl;
 
-import com.pragya.oimspro.part.Repository.PartRepository;
+import com.pragya.oimspro.part.repository.PartRepository;
 import com.pragya.oimspro.part.entity.Part;
 import com.pragya.oimspro.part.service.PartService;
 import lombok.RequiredArgsConstructor;

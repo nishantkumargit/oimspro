@@ -7,9 +7,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 public interface McuMessageRepository extends JpaRepository<McuMessage, Long>{
+
+    @Query("SELECT SUM(m.count) FROM McuMessage m WHERE m.deviceId = :deviceId AND m.publishedTime BETWEEN :start AND :end")
+    Long getSumOfCountsForDevice(@Param("deviceId") String deviceId,
+                                 @Param("start") LocalDateTime start,
+                                 @Param("end") LocalDateTime end);
+
+    @Query("SELECT SUM(m.count) FROM McuMessage m WHERE m.publishedTime BETWEEN :start AND :end")
+    Long getSumOfCountsForAllDevices(@Param("start") LocalDateTime start,
+                                     @Param("end") LocalDateTime end);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO mcu_message (device_id, machine_id, count, published_time, nodemcu_code, hourly_bucket) " +
