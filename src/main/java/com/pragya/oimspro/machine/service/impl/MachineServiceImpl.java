@@ -21,8 +21,9 @@ public class MachineServiceImpl implements MachineService {
 
     @Transactional
     public Machine saveMachine(Machine machine) {
+        machineRepository.save(machine);
         machineConfigurationHistoryService.saveNewMachineConfiguration(machine);
-        return machineRepository.save(machine);
+        return machine;
     }
 
     public List<Machine> getAllMachines() {

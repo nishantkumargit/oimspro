@@ -122,7 +122,7 @@ public class ProductionReportServiceImpl implements ProductionReportService {
 
         for (int i = 0; i < configurations.size(); i++) {
             MachineConfigurationHistory config = configurations.get(i);
-            LocalDateTime configStart = startOfDay;
+            LocalDateTime configStart = config.getStartTimestamp();
             LocalDateTime configEnd = (i < configurations.size() - 1)
                     ? configurations.get(i + 1).getStartTimestamp()
                     : endOfDay;
