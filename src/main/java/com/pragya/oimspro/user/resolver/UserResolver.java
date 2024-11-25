@@ -5,12 +5,13 @@ import com.pragya.oimspro.user.entity.User;
 import com.pragya.oimspro.user.repository.UserRepository;
 import com.pragya.oimspro.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user/")
+@RequestMapping("/api/user")
 public class UserResolver {
 
     @Autowired
@@ -27,8 +28,8 @@ public class UserResolver {
     }
 
     @GetMapping
-    public List<User> getUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @DeleteMapping("{id}")

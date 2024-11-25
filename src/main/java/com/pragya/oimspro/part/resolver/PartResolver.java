@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/part/")
+@RequestMapping("/api/part")
 @RequiredArgsConstructor
 
 public class PartResolver {
