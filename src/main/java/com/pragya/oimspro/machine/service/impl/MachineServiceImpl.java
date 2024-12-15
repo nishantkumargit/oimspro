@@ -4,20 +4,25 @@ import com.pragya.oimspro.machine.entity.Machine;
 import com.pragya.oimspro.machine.repository.MachineRepository;
 import com.pragya.oimspro.machine.service.MachineConfigurationHistoryService;
 import com.pragya.oimspro.machine.service.MachineService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.pragya.oimspro.nodemcu.service.McuMessageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class MachineServiceImpl implements MachineService {
-    @Autowired
-    MachineRepository machineRepository;
 
-    @Autowired
-    MachineConfigurationHistoryService machineConfigurationHistoryService;
+    private final MachineRepository machineRepository;
+    private final McuMessageService mcuMessageService;
+    private final MachineConfigurationHistoryService machineConfigurationHistoryService;
+
+    public MachineServiceImpl(MachineRepository machineRepository, MachineConfigurationHistoryService machineConfigurationHistoryService,McuMessageService mcuMessageService) {
+        this.machineRepository = machineRepository;
+        this.machineConfigurationHistoryService = machineConfigurationHistoryService;
+        this.mcuMessageService = mcuMessageService;
+    }
 
     @Transactional
     public Machine saveMachine(Machine machine) {
@@ -37,4 +42,14 @@ public class MachineServiceImpl implements MachineService {
     public Machine getMachineById(long machineId) {
         return machineRepository.findById(machineId).orElse(null);
     }
+
+    @Override
+    public long fetchMachineCount(Machine newMachine, LocalDateTime currTime) {
+        long machineId = newMachine.getId();
+        if(getMachineById(machineId)==null || machineId==0 ) {
+            return 0;
+        }
+        return mcuMessageService.getCountAtTime(machineId, currTime);
+    }
+
 }

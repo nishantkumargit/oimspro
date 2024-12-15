@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -20,4 +21,6 @@ public interface MachineService {
     public void deleteMachine(long id);
 
     Machine getMachineById(long machineId);
+
+    long fetchMachineCount(Machine newMachine, LocalDateTime currTime);
 }

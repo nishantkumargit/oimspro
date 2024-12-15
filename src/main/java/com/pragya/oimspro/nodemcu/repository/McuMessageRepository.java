@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface McuMessageRepository extends JpaRepository<McuMessage, Long>{
 
@@ -21,6 +22,14 @@ public interface McuMessageRepository extends JpaRepository<McuMessage, Long>{
     @Query("SELECT SUM(m.count) FROM McuMessage m WHERE m.publishedTime BETWEEN :start AND :end")
     Long getSumOfCountsForAllDevices(@Param("start") LocalDateTime start,
                                      @Param("end") LocalDateTime end);
+
+    @Query("SELECT m FROM McuMessage m WHERE m.deviceId = :deviceId AND m.publishedTime <= :targetTimestamp ORDER BY m.publishedTime DESC")
+    List<McuMessage> getNearestRecordToTimestamp(@Param("deviceId") String deviceId,
+                                       @Param("targetTimestamp") LocalDateTime targetTimestamp);
+
+    @Query("SELECT count FROM McuMessage m WHERE m.siteId = :machineId AND m.publishedTime <= :time ORDER BY m.publishedTime DESC LIMIT 1")
+    Long getCountAtTime(@Param("machineId") Long machineId, @Param("time") LocalDateTime time);
+
 
     @Modifying
     @Transactional

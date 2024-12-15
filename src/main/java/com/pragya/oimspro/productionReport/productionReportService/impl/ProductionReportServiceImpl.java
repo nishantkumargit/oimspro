@@ -4,6 +4,7 @@ import com.pragya.oimspro.machine.entity.Machine;
 import com.pragya.oimspro.machine.entity.MachineConfigurationHistory;
 import com.pragya.oimspro.machine.repository.MachineConfigurationHistoryRepository;
 import com.pragya.oimspro.machine.repository.MachineRepository;
+import com.pragya.oimspro.nodemcu.entity.McuMessage;
 import com.pragya.oimspro.nodemcu.entity.NodeMcu;
 import com.pragya.oimspro.nodemcu.repository.NodeMcuRepository;
 import com.pragya.oimspro.part.entity.Part;
@@ -122,9 +123,9 @@ public class ProductionReportServiceImpl implements ProductionReportService {
 
         for (int i = 0; i < configurations.size(); i++) {
             MachineConfigurationHistory config = configurations.get(i);
-            LocalDateTime configStart = startOfDay;
-            LocalDateTime configEnd = (i < configurations.size() - 1)
-                    ? configurations.get(i + 1).getStartTimestamp()
+            LocalDateTime configStart = config.getStartTimestamp();
+            LocalDateTime configEnd = (config.getEndTimestamp()!=null)
+                    ? configurations.get(i).getEndTimestamp()
                     : endOfDay;
 
             // Fetch related machine info
@@ -133,6 +134,11 @@ public class ProductionReportServiceImpl implements ProductionReportService {
                     .orElseThrow(() -> new RuntimeException("Machine not found"));
             String machineStatus = machine.map(Machine::getStatus)
                     .orElse("Unknown Status");
+            String machineCode = machine.map(Machine::getCode)
+                    .orElse("Unknown Code");
+            String operatorName = machine.map(Machine::getMachineOperator)
+                    .map(Object::toString)
+                    .orElse("Unknown Operator");
 
             // Fetch related part info
             Optional<Part> part = partRepository.findById(config.getPartId());
@@ -158,13 +164,24 @@ public class ProductionReportServiceImpl implements ProductionReportService {
                     .map(NodeMcu::getDeviceId)
                     .orElse("Unknown NodeMcu");
 
-            logger.info("Generating report for machine: {}, part: {}, raw material: {}, start: {}, end: {} , nodeMcuId: {} config start: {} config end: {}",
-                    machineName, partName, rawMaterialName, configStart, configEnd,machine.get().getCurrentNodeMcuId(),configStart,configEnd);
+            logger.info("Generating report for machine: {}, part: {}, raw material: {}, start: {}, end: {} , nodeMcuCode: {} config start: {} config end: {}",
+                    machineName, partName, rawMaterialName, configStart, configEnd,nodeMcuDeviceCode,configStart,configEnd);
             // Fetch messages from MCU for this configuration period
-            Long messageCount =Optional.ofNullable(mcuMessageRepository.getSumOfCountsForDevice(
-                    nodeMcuDeviceCode, configStart, configEnd)).orElse(0L);
+            // Calculate starting count
+//            List<McuMessage> startingMcuMessages = mcuMessageRepository.getNearestRecordToTimestamp(nodeMcuDeviceCode, configStart);
+//            Optional<Long> startingCount = Optional.of(startingMcuMessages.size() > 0 ? startingMcuMessages.get(0).getCount() : 0L);
+            Long startingCount = mcuMessageRepository.getCountAtTime(machine.get().getId(),configStart);
 
-            Float workingHours = 0.0f;
+            // Calculate ending count
+//            List<McuMessage> endingMcuMessage = mcuMessageRepository.getNearestRecordToTimestamp(nodeMcuDeviceCode, configEnd);
+//            Optional<Long> endingCount = Optional.of(endingMcuMessage.size() > 0 ? endingMcuMessage.get(0).getCount() : 0L);
+            Long endingCount = mcuMessageRepository.getCountAtTime(machine.get().getId(),configEnd);
+
+            // Calculate total count for this configuration
+            Long messageCount = Math.max(0, endingCount - startingCount);
+
+
+            Float workingHours = 8.0f;
 
             String idealProduction = "NA";
             String actualProduction = "NA";
@@ -173,7 +190,9 @@ public class ProductionReportServiceImpl implements ProductionReportService {
             // Build the report
             ProductionReportEntry report = new ProductionReportEntry();
             report.setMachineName(machineName);
-            report.setOperatorName(config.getOperatorId()==null ? "test operator" : config.getOperatorId().toString()); // Fetch operator details if needed
+            report.setMachineCode(machineCode);
+            report.setMachineStatus(machineStatus);
+            report.setOperatorName(operatorName);
             report.setPartName(partName);
             report.setPartWeight(partWeight);
             report.setRawMaterialName(rawMaterialName);

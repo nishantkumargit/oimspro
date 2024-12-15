@@ -15,6 +15,6 @@ public interface McuMessageService {
 
     Long getTotalProductionCount(LocalDateTime start, LocalDateTime end);
 
-
+    Long getCountAtTime(long machineId, LocalDateTime time);
 }
 

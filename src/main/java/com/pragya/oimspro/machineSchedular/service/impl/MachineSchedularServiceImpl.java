@@ -35,7 +35,7 @@ public class MachineSchedularServiceImpl implements MachineSchedularService {
         Machine machine = machineService.getMachineById(machineId);
         Part part = partService.getPartById(partId);
         RawMaterial rawMaterial = rawMaterialService.getRawMaterialById(rawMaterialId);
-        if(partId == machine.getCurrentPartId() && rawMaterialId == machine.getCurrentRawMaterialId()) {
+        if(partId.equals(machine.getCurrentPartId()) && rawMaterialId.equals(machine.getCurrentRawMaterialId())) {
             return;
         }
         updateMachineConfig(machine, part, rawMaterial);
