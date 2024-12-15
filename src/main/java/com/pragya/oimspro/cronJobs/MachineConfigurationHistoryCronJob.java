@@ -29,7 +29,7 @@ public class MachineConfigurationHistoryCronJob {
         this.mcuMessageService = mcuMessageService;
     }
     @Transactional
-    @Scheduled(cron = "0 */3 * * * ?") // Run every day at 12:00
+    @Scheduled(cron = "0 0 0 * * ?") // Run every day at 12:00
     public void addNewConfigurationEntries() {
         // Step 1: Fetch all active configurations (where end_time is NULL)
 
