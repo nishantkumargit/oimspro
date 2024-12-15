@@ -101,7 +101,7 @@ public class McuMessageServiceImpl implements McuMessageService{
             nodeMcu.setStatus(Status.ACTIVE);
             nodeMcu.setInstallationDate(new Date());
             logger.info("NodeMcu not found in database, adding new nodeMcu {}",nodeMcu.toString());
-            nodeMcuService.addNodeMcu(nodeMcu);
+            nodeMcuService.saveNodemcu(nodeMcu);
         }
 
         addMcuMessage(mcuMessage);
@@ -113,5 +113,9 @@ public class McuMessageServiceImpl implements McuMessageService{
 
     public Long getTotalProductionCount(LocalDateTime start, LocalDateTime end) {
         return Optional.ofNullable(mcuMessageRepository.getSumOfCountsForAllDevices(start, end)).orElse(0L);
+    }
+
+    public Long getCountAtTime(long machineId, LocalDateTime time) {
+        return Optional.ofNullable(mcuMessageRepository.getCountAtTime(machineId, time)).orElse(0L);
     }
 }

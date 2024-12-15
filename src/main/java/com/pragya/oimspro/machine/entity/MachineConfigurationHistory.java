@@ -20,6 +20,12 @@ public class MachineConfigurationHistory {
             allocationSize = 1)
     private Long id;
 
+    @Column(name = "START_COUNT")
+    private long startCount;
+
+    @Column(name = "END_COUNT")
+    private long endCount;
+
     @Column(name = "MACHINE_ID")
     private Long machineId;
 

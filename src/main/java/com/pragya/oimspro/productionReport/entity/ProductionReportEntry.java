@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ProductionReportEntry {
     private String machineName;
+    private String machineCode;
+    private String machineStatus;
     private String PartName;
     private String rawMaterialName;
     private String operatorName;

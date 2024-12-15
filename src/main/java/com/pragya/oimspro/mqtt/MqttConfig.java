@@ -65,7 +65,7 @@ public class MqttConfig {
         return options;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 60000)
     public void monitorConnection() {
         try {
             if (mqttClient.isConnected()) {
